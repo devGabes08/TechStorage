@@ -1,0 +1,9 @@
+async function jsonReq(url,data){ const res = await fetch(url,{method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data), credentials:'include'}); return res.json(); }
+export async function getArmazens(){ const r = await fetch('/api/armazens_read.php',{credentials:'include'}); return r.json(); }
+export async function createArmazem(data){ return jsonReq('/api/armazens_create.php', data); }
+export async function updateArmazem(data){ return jsonReq('/api/armazens_update.php', data); }
+export async function deleteArmazem(id){ return jsonReq('/api/armazens_delete.php', {id_armazem:id}); }
+window.showAddWarehouse = function(){ document.getElementById('addWarehouseForm').style.display='block'; }
+window.addWarehouse = async function(){ const nome=document.getElementById('warehouseName').value; const codigo=document.getElementById('warehouseCode')?document.getElementById('warehouseCode').value:''; const resp = await createArmazem({nome,codigo}); if(resp.success){ alert('Armazém criado'); location.reload(); } else alert('Erro'); }
+window.loadArmazens = async function(){ const r = await getArmazens(); const t = document.getElementById('warehousesList'); if(!t) return; t.innerHTML=''; r.armazens.forEach(a=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${a.id_armazem}</td><td>${a.nome}</td><td>${a.codigo}</td><td><button class='btn btn-sm btn-warning' onclick="(async ()=>{ const n=prompt('Nome', a.nome); if(!n) return; await updateArmazem({id_armazem:a.id_armazem,nome:n}); location.reload(); })()">Editar</button> <button class='btn btn-sm btn-danger' onclick="(async ()=>{ if(!confirm('Deletar?')) return; await deleteArmazem(${a.id_armazem}); location.reload(); })()">Apagar</button></td>`; t.appendChild(tr); }); }
+window.addEventListener('DOMContentLoaded', window.loadArmazens);
