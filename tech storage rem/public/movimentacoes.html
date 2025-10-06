@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Movimentações - TechStorage</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script type="module" src="../js/movimentacoes.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="dashboard.html">TechStorage</a>
+    <div class="d-flex">
+      <a class="btn btn-outline-light me-2" href="produtos.html">Produtos</a>
+      <a class="btn btn-outline-light me-2" href="armazens.html">Armazéns</a>
+      <a class="btn btn-outline-light me-2" href="locais.html">Locais</a>
+      <a class="btn btn-outline-light me-2" href="unidades.html">Unidades</a>
+      <a class="btn btn-outline-light me-2" href="movimentacoes.html">Movimentações</a>
+      <a class="btn btn-danger" href="login.html">Sair</a>
+    </div>
+  </div>
+</nav>
+<div class="container mt-4">
+  <button class="btn btn-secondary mb-3" onclick="window.location.href='dashboard.html'">Voltar ao Dashboard</button>
+  <h2>Movimentações</h2>
+  <button class="btn btn-primary mb-3" onclick="showAddMov()">Registrar Movimentação</button>
+  <div id="addMovForm" style="display:none;" class="mb-3">
+    <select id="movTipo" class="form-select mb-2"><option value="ENTRADA">ENTRADA</option><option value="SAIDA">SAIDA</option><option value="TRANSFERENCIA">TRANSFERENCIA</option><option value="AJUSTE">AJUSTE</option></select>
+    <select id="movProduto" class="form-select mb-2"></select>
+    <select id="movOrigem" class="form-select mb-2"><option value="">-- Origem (se aplicável) --</option></select>
+    <select id="movDestino" class="form-select mb-2"><option value="">-- Destino (se aplicável) --</option></select>
+    <input id="movQuantidade" class="form-control mb-2" type="number" step="0.001" placeholder="Quantidade">
+    <input id="movObs" class="form-control mb-2" placeholder="Observação (opcional)">
+    <button class="btn btn-success" onclick="addMov()">Registrar</button>
+  </div>
+  <table class="table table-bordered"><thead><tr><th>ID</th><th>Tipo</th><th>Produto</th><th>Qtd</th><th>Usuário</th><th>Quando</th></tr></thead><tbody id="movList"></tbody></table>
+</div>
+<script type="module">
+import { getProdutos } from '../js/items.js';
+import { getLocais } from '../js/locais.js';
+window.addEventListener('DOMContentLoaded', async ()=>{
+  const p = await getProdutos(); const sprod = document.getElementById('movProduto'); sprod.innerHTML=''; p.produtos.forEach(x=>{ const o=document.createElement('option'); o.value = x.id_produto; o.textContent = x.sku + ' - ' + x.nome; sprod.appendChild(o); });
+  const l = await getLocais(); const sor = document.getElementById('movOrigem'); const sde = document.getElementById('movDestino'); sor.innerHTML='<option value="">-- Origem (se aplicável) --</option>'; sde.innerHTML='<option value="">-- Destino (se aplicável) --</option>'; l.locais.forEach(x=>{ const o=document.createElement('option'); o.value=x.id_local; o.textContent = x.armazem_nome + ' / ' + x.codigo_local; sor.appendChild(o); sde.appendChild(o.cloneNode(true)); });
+});
+</script>
+</body></html>

@@ -1,0 +1,9 @@
+async function jsonReq(url,data){ const res = await fetch(url,{method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data), credentials:'include'}); return res.json(); }
+export async function getLocais(){ const r = await fetch('/api/locais_read.php',{credentials:'include'}); return r.json(); }
+export async function createLocal(data){ return jsonReq('/api/locais_create.php', data); }
+export async function updateLocal(data){ return jsonReq('/api/locais_update.php', data); }
+export async function deleteLocal(id){ return jsonReq('/api/locais_delete.php', {id_local:id}); }
+window.showAddLocal = function(){ document.getElementById('addLocalForm').style.display='block'; }
+window.addLocal = async function(){ const id_armazem=parseInt(document.getElementById('localArmazem').value||0); const codigo=document.getElementById('localCodigo').value; const tipo=document.getElementById('localTipo').value; const resp = await createLocal({id_armazem,codigo_local:codigo,tipo}); if(resp.success){ alert('Local criado'); location.reload(); } else alert('Erro'); }
+window.loadLocais = async function(){ const r = await getLocais(); const t = document.getElementById('locaisList'); if(!t) return; t.innerHTML=''; r.locais.forEach(l=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${l.id_local}</td><td>${l.armazem_nome}</td><td>${l.codigo_local}</td><td>${l.tipo}</td><td><button class='btn btn-sm btn-warning' onclick="(async ()=>{ const c=prompt('Codigo local', l.codigo_local); if(!c) return; await updateLocal({id_local:l.id_local,codigo_local:c}); location.reload(); })()">Editar</button> <button class='btn btn-sm btn-danger' onclick="(async ()=>{ if(!confirm('Deletar?')) return; await deleteLocal(${l.id_local}); location.reload(); })()">Apagar</button></td>`; t.appendChild(tr); }); }
+window.addEventListener('DOMContentLoaded', window.loadLocais);
