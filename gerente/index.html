@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Sistema de Gestão de Armazém</title>
+    <link rel="stylesheet" href="../assets/css/index.css" />
+  </head>
+  <body>
+    <div class="left">
+      <h1>TechStorage</h1>
+      <p>
+        Sistema de Gestão de Armazém — controle produtos, pedidos e usuários de
+        forma eficiente.
+      </p>
+    </div>
+
+    <div class="right">
+      <form class="login-box" action="login_processa.php" method="POST">
+        <h2>Login</h2>
+
+        <label for="email">E-mail</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="exemplo@empresa.com"
+          required
+        />
+
+        <label for="senha">Senha</label>
+        <input
+          type="password"
+          id="senha"
+          name="senha"
+          placeholder="Digite sua senha"
+          required
+        />
+
+        <button type="submit">Entrar</button>
+
+        <p class="footer">© 2025 TechStorage</p>
+      </form>
+    </div>
+  </body>
+  <script src="../assets/js/gerente_inserir.js"></script>
+</html>
